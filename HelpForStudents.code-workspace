@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "Client"
+		},
+		{
+			"path": "WebApi"
+		},
+		{
+			"path": "WebServer"
+		}
+	],
+	"settings": {}
+}
