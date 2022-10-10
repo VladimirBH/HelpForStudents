@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  reverseproxy:
+    build:
+      context: ./WebServer
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    restart: always
+
+  webapi:
+    depends_on:
+      - reverseproxy
+    build: 
+      context: ./WebApi/HelpForStudentsWebApi
+      dockerfile: Dockerfile
+    restart: always
+    expose:
+      - "5000"
