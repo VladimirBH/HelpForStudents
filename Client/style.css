@@ -24,6 +24,9 @@ header {
     grid-column: 1 / 3;
     grid-row: 3 / 3;
   }
+  li {
+    list-style-type: none; /* Убираем маркеры */
+   }
 
   @import url('https://fonts.googleapis.com/css?family=Ubuntu+Condensed');
   .menu-main {
