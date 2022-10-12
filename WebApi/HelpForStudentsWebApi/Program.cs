@@ -33,7 +33,9 @@ namespace HelpForStudentsWebApi
                     Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
             });
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+
+            app.UseHsts();
 
             app.UseAuthorization();
 
