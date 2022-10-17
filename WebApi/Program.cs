@@ -26,10 +26,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseForwardedHeaders();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+app.UseHttpsRedirection();
+
+app.UseHsts();
 
 app.UseAuthorization();
 
