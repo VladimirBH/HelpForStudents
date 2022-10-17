@@ -1,8 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS base
 WORKDIR /app
-EXPOSE 5000
-
-ENV ASPNETCORE_URLS=http://+:5000
+EXPOSE 80
+EXPOSE 443
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
@@ -11,10 +10,10 @@ USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
-COPY ["WebApi.csproj", "./"]
-RUN dotnet restore "WebApi.csproj"
+COPY ["WebApi/WebApi.csproj", "WebApi/"]
+RUN dotnet restore "WebApi/WebApi.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/WebApi"
 RUN dotnet build "WebApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
