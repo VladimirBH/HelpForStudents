@@ -2,11 +2,25 @@
 
 version: '3.7'
 
+networks:
+  webapi-dev:
+    driver: bridge
+
 services:
   webapi:
     image: webapi
+    environment:
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=43279HelpOurSTUdEnt42184
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/webapihttps.pfx
     build:
       context: .
       dockerfile: WebApi/Dockerfile
+    volumes:
+      - .\HttpsCertificate:/https/
     ports:
-      - 80:80
+      - 8000:80
+      - 8001:443
+    networks:
+      - webapi-dev

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {}
+    "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {
+    "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+        "projectUniqueName": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
-        "packagesPath": "C:\\Users\\ICRP8\\.nuget\\packages\\",
-        "outputPath": "C:\\for_work\\HelpForStudents\\WebApi\\obj\\",
+        "projectPath": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+        "packagesPath": "C:\\Users\\vladi\\.nuget\\packages\\",
+        "outputPath": "D:\\for_work\\HelpForStudents\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ICRP8\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\vladi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
