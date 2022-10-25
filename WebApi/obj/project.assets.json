@@ -1575,6 +1575,18 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "NodaTime/3.1.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.7.1"
+        },
+        "compile": {
+          "lib/net6.0/NodaTime.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/NodaTime.dll": {}
+        }
+      },
       "Npgsql/6.0.7": {
         "type": "package",
         "dependencies": {
@@ -5626,6 +5638,23 @@
         "newtonsoft.json.13.0.1.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
+      ]
+    },
+    "NodaTime/3.1.4": {
+      "sha512": "ZibE6uZCliPPQMsZuzNxppIDEEc3jdTiyOog/hmnc/DzBavBT4pAt01BVQXGwBWK52mIbJLcwL7wxl6YX5XILQ==",
+      "type": "package",
+      "path": "nodatime/3.1.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/NodaTime.dll",
+        "lib/net6.0/NodaTime.pdb",
+        "lib/net6.0/NodaTime.xml",
+        "lib/netstandard2.0/NodaTime.dll",
+        "lib/netstandard2.0/NodaTime.pdb",
+        "lib/netstandard2.0/NodaTime.xml",
+        "nodatime.3.1.4.nupkg.sha512",
+        "nodatime.nuspec"
       ]
     },
     "Npgsql/6.0.7": {
@@ -9907,28 +9936,29 @@
       "Microsoft.EntityFrameworkCore.Design >= 6.0.10",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.10",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.10",
+      "NodaTime >= 3.1.4",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 6.0.7",
       "Swashbuckle.AspNetCore >= 6.2.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vladi\\.nuget\\packages\\": {},
+    "C:\\Users\\ICRP8\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+      "projectUniqueName": "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
       "projectName": "WebApi",
-      "projectPath": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
-      "packagesPath": "C:\\Users\\vladi\\.nuget\\packages\\",
-      "outputPath": "D:\\for_work\\HelpForStudents\\WebApi\\obj\\",
+      "projectPath": "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+      "packagesPath": "C:\\Users\\ICRP8\\.nuget\\packages\\",
+      "outputPath": "C:\\for_work\\HelpForStudents\\WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\vladi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ICRP8\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -9980,6 +10010,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[6.0.10, )"
+          },
+          "NodaTime": {
+            "target": "Package",
+            "version": "[3.1.4, )"
           },
           "Npgsql.EntityFrameworkCore.PostgreSQL": {
             "target": "Package",
