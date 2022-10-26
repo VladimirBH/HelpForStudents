@@ -1,6 +1,6 @@
 using NodaTime;
 
-namespace WebApi.Database
+namespace WebApi.DataAccess.Contracts
 {
     public interface IEntity
     {

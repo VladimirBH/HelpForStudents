@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using WebApi.Database;
 
-namespace WebApi
+namespace WebApi.DataAccess.Database
 {
-    public class Payments : Entity
+    [Table("payments")]
+    public class Payment : Entity
     {
         
     }

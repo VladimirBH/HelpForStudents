@@ -2,6 +2,8 @@ using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
 using WebApi;
 using Microsoft.EntityFrameworkCore;
+using WebApi.DataAccess.Contracts;
+using WebApi.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,16 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<HelpForStudentsContext>(options => options.UseNpgsql(connectionString));
+
+#region Repositories
+    builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+    builder.Services.AddTransient<IUserRepository, UserRepository>();
+    builder.Services.AddTransient<IThemeRepository, ThemeRepository>();
+    builder.Services.AddTransient<IDocumentRepository, DocumentRepository>();
+    builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
+    builder.Services.AddTransient<IFormulaRepository, FormulaRepository>();
+#endregion
+
 /*builder.Services.AddHttpsRedirection(options =>
 {
     options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;

@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using WebApi.Database;
 
-namespace WebApi
+namespace WebApi.DataAccess.Database
 {
-    public class Users : Entity
+    [Table("users")]
+    public class User : Entity
     {
         [Column("name")]
         public string Name {get; set;}

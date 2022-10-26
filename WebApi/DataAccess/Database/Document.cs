@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApi.Database
+namespace WebApi.DataAccess.Database
 {
-    public class Documents : Entity
+    [Table("documents")]
+    public class Document : Entity
     {
         [Column("path")]
         public string Path {get; set;}

@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using NodaTime;
-namespace WebApi.Database
+
+using WebApi.DataAccess.Contracts;
+
+namespace WebApi.DataAccess.Database
 {
     public class Entity : IEntity
     {
