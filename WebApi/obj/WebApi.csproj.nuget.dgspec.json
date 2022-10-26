@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {}
+    "c:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {
+    "c:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+        "projectUniqueName": "c:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "C:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+        "projectPath": "c:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
         "packagesPath": "C:\\Users\\ICRP8\\.nuget\\packages\\",
-        "outputPath": "C:\\for_work\\HelpForStudents\\WebApi\\obj\\",
+        "outputPath": "c:\\for_work\\HelpForStudents\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,15 +44,31 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "EFCore.NamingConventions": {
               "target": "Package",
               "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.4, )"
             },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.10, )"
             },
             "Microsoft.AspNetCore.HttpOverrides": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
               "target": "Package",
               "version": "[2.2.0, )"
             },
@@ -72,11 +88,19 @@
             },
             "NodaTime": {
               "target": "Package",
-              "version": "[3.1.4, )"
+              "version": "[3.1.0, )"
+            },
+            "NodaTime.Serialization.SystemTextJson": {
+              "target": "Package",
+              "version": "[1.0.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[6.0.7, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime": {
+              "target": "Package",
+              "version": "[6.0.4, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
