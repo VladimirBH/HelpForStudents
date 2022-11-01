@@ -1,9 +1,14 @@
 using System.Net;
+using System.Text;
 using Microsoft.AspNetCore.HttpOverrides;
-using WebApi;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using WebApi;
 using WebApi.DataAccess.Contracts;
 using WebApi.DataAccess.Repositories;
+using Microsoft.IdentityModel.Tokens;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +29,23 @@ builder.Services.AddDbContext<HelpForStudentsContext>(options => options.UseNpgs
     builder.Services.AddTransient<ISubjectRepository, SubjectRepository>();
     builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
 #endregion
-
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JWT:Issuer"],
+                    ValidAudience = builder.Configuration["JWT:Audience"],
+                    IssuerSigningKey = new
+                    SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes
+                    (builder.Configuration["JWT:Key"]))
+                };
+            });
+    builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 /*builder.Services.AddHttpsRedirection(options =>
 {
     options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
