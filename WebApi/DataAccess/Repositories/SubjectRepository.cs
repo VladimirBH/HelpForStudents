@@ -3,9 +3,9 @@ using WebApi.DataAccess.Database;
 
 namespace WebApi.DataAccess.Repositories
 {
-    public class DocumentRepository : GenericRepository<Document>, IDocumentRepository
+    public class SubjectRepository : GenericRepository<Subject>, ISubjectRepository
     {
-        public DocumentRepository(HelpForStudentsContext context, IConfiguration configuration)
+        public SubjectRepository(HelpForStudentsContext context, IConfiguration configuration)
             : base(context, configuration)
         {
             

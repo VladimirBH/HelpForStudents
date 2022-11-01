@@ -21,9 +21,8 @@ builder.Services.AddDbContext<HelpForStudentsContext>(options => options.UseNpgs
     builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
     builder.Services.AddTransient<IUserRepository, UserRepository>();
     builder.Services.AddTransient<IThemeRepository, ThemeRepository>();
-    builder.Services.AddTransient<IDocumentRepository, DocumentRepository>();
+    builder.Services.AddTransient<ISubjectRepository, SubjectRepository>();
     builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
-    builder.Services.AddTransient<IFormulaRepository, FormulaRepository>();
 #endregion
 
 /*builder.Services.AddHttpsRedirection(options =>

@@ -11,8 +11,7 @@ namespace WebApi
         }
 
         public DbSet<User>? Users { get; set; }
-        public DbSet<Document>? Documents { get; set; }
-        public DbSet<Formula>? Formulas { get; set; }
+        public DbSet<Subject>? Subjects { get; set; }
         public DbSet<Payment>? Payments { get; set; }
         public DbSet<Theme>? Themes { get; set; }
         
@@ -23,12 +22,7 @@ namespace WebApi
                 entity.Property(e => e.CreationDate).HasColumnType("datetime with time zone");
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime with time zone");
             });
-            modelBuilder.Entity<Document>(entity =>
-            {
-                entity.Property(e => e.CreationDate).HasColumnType("datetime with time zone");
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime with time zone");
-            });
-            modelBuilder.Entity<Formula>(entity =>
+            modelBuilder.Entity<Subject>(entity =>
             {
                 entity.Property(e => e.CreationDate).HasColumnType("datetime with time zone");
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime with time zone");
