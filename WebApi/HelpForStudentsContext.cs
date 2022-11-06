@@ -10,10 +10,10 @@ namespace WebApi
             
         }
 
-        public DbSet<User>? Users { get; set; }
-        public DbSet<Subject>? Subjects { get; set; }
-        public DbSet<Payment>? Payments { get; set; }
-        public DbSet<Theme>? Themes { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Theme> Themes { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

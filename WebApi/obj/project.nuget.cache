@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "C7bAwzpBGzzOiZ7h4/aE0M+8YxSAO6eRsrmrsSUB32rHwakbMQX0E+5hiAnnfGIOshMaqgsUbl9bSaHrVanajA==",
+  "dgSpecHash": "uBuxCWV3f/WmyotI+RM71XuoF6EK3U8j9WxxrcH/yTXbJ3ohLQT83EdetlyTWsoE0rHegiZuD4BEZ3p0u0kPLQ==",
   "success": true,
-  "projectFilePath": "d:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+  "projectFilePath": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vladi\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\vladi\\.nuget\\packages\\efcore.namingconventions\\6.0.0\\efcore.namingconventions.6.0.0.nupkg.sha512",

@@ -8,7 +8,12 @@ namespace WebApi.Services
 {
     public class TokenService : ITokenService
     {
-         public string BuildAccessToken(string key, string issuer, User user)
+        private readonly IConfiguration Configuration;
+        public TokenService(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        public string BuildAccessToken(string key, string issuer, User user)
         {
             var claims = new[] {
                     new Claim(ClaimTypes.Name, user.Email),
