@@ -19,13 +19,20 @@ namespace WebApi.DataAccess.Repositories
             var user = GetByEmail(dataAuth.Email);
             if (user == null) throw new AuthenticationException();
             if (!BCrypt.Net.BCrypt.Verify(dataAuth.Password, user.Password)) throw new AuthenticationException();
-            var tokenService = new TokenService(Configuration);
             var tokenPair = new TokenPair
             {
-                AccessToken = tokenService.BuildAccessToken(Configuration["JWT:Key"],
-                    Configuration["JWT:Issuer"], user),
-                RefreshToken = tokenService.BuildRefreshToken(Configuration["JWT:Key"],
-                    Configuration["JWT:Issuer"], user),
+                AccessToken = TokenService.BuildAccessToken(
+                    user: user, 
+                    key: Configuration["JWT:Key"],
+                    issuer: Configuration["JWT:Issuer"],
+                    audience: Configuration["JWT:Audience"],
+                    accessTokenLifeTime: int.Parse(Configuration["JWT:AccessTokenLifeTime"])),
+                RefreshToken = TokenService.BuildRefreshToken(
+                    user: user, 
+                    key: Configuration["JWT:Key"],
+                    issuer: Configuration["JWT:Issuer"],
+                    audience: Configuration["JWT:Audience"],
+                    refreshTokenLifeTime: int.Parse(Configuration["JWT:RefreshTokenLifeTime"])),
                 ExpiredInAccessToken = int.Parse(Configuration["JWT:AccessTokenLifeTime"]),
                 ExpiredInRefreshToken = int.Parse(Configuration["JWT:RefreshTokenLifeTime"]),
                 CreationDateTime = DateTime.Now
@@ -35,12 +42,15 @@ namespace WebApi.DataAccess.Repositories
 
         public int GetUserIdFromRefreshToken(string refreshToken)
         {
-            var tokenService = new TokenService(Configuration);
-            if (!tokenService.IsTokenValid(Configuration["JWT:Key"], Configuration["JWT:Issuer"], refreshToken))
+            if (!TokenService.IsTokenValid(
+                token: refreshToken,
+                key: Configuration["JWT:Key"],
+                issuer: Configuration["JWT:Issuer"],
+                audience: Configuration["JWT:Audience"]))
                 throw new AuthenticationException();
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadJwtToken(refreshToken);
-            var id = jsonToken?.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            var id = jsonToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
             if (id == null)
             {
                 throw new AuthenticationException();
@@ -51,12 +61,15 @@ namespace WebApi.DataAccess.Repositories
         
         public int GetUserIdFromAccessToken(string accessToken)
         {
-            var tokenService = new TokenService(Configuration);
-            if (!tokenService.IsTokenValid(Configuration["JWT:Key"], Configuration["JWT:Issuer"], accessToken))
+            if (!TokenService.IsTokenValid(
+                token: accessToken,
+                key: Configuration["JWT:Key"],
+                issuer: Configuration["JWT:Issuer"],
+                audience: Configuration["JWT:Audience"]))
                 throw new AuthenticationException();
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadJwtToken(accessToken);
-            var email = jsonToken?.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            var email = jsonToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
             if (email == null)
             {
                 throw new AuthenticationException();
@@ -67,13 +80,22 @@ namespace WebApi.DataAccess.Repositories
 
         public TokenPair RefreshPairTokens(string refreshToken)
         {
-            var tokenService = new TokenService(Configuration);
             var user = GetById(GetUserIdFromRefreshToken(refreshToken));
             user = GetByEmail(user.Email);
             var tokenPair = new TokenPair
             {
-                AccessToken = tokenService.BuildAccessToken(Configuration["JWT:Key"], Configuration["JWT:Issuer"], user),
-                RefreshToken = tokenService.BuildRefreshToken(Configuration["JWT:Key"], Configuration["JWT:Issuer"], user),
+                AccessToken = TokenService.BuildAccessToken(
+                    user: user, 
+                    key: Configuration["JWT:Key"],
+                    issuer: Configuration["JWT:Issuer"],
+                    audience: Configuration["JWT:Audience"],
+                    accessTokenLifeTime: int.Parse(Configuration["JWT:AccessTokenLifeTime"])),
+                RefreshToken = TokenService.BuildRefreshToken(
+                    user: user, 
+                    key: Configuration["JWT:Key"],
+                    issuer: Configuration["JWT:Issuer"],
+                    audience: Configuration["JWT:Audience"],
+                    refreshTokenLifeTime: int.Parse(Configuration["JWT:RefreshTokenLifeTime"])),
                 ExpiredInAccessToken = int.Parse(Configuration["JWT:AccessTokenLifeTime"]),
                 ExpiredInRefreshToken = int.Parse(Configuration["JWT:RefreshTokenLifeTime"]),
                 CreationDateTime = DateTime.Now

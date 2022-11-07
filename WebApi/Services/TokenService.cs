@@ -8,12 +8,7 @@ namespace WebApi.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IConfiguration Configuration;
-        public TokenService(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-        public string BuildAccessToken(string key, string issuer, User user)
+        public static string BuildAccessToken(User user, string key, string issuer, string audience, int accessTokenLifeTime)
         {
             var claims = new[] {
                     new Claim(ClaimTypes.Name, user.Email),
@@ -22,12 +17,12 @@ namespace WebApi.Services
                 };
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-            var tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims,
-                expires: DateTime.Now.AddSeconds(int.Parse(Configuration["JWT:AccessTokenLifeTime"])), signingCredentials: credentials);
+            var tokenDescriptor = new JwtSecurityToken(issuer, audience, claims,
+                expires: DateTime.Now.AddSeconds(accessTokenLifeTime), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
         
-        public string BuildRefreshToken(string key, string issuer, User user)
+        public static string BuildRefreshToken(User user, string key, string issuer, string audience, int refreshTokenLifeTime)
         {
             var claims = new[] {
                 new Claim(ClaimTypes.Name, user.Id.ToString()),
@@ -36,11 +31,11 @@ namespace WebApi.Services
             };
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-            var tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims,
-                expires: DateTime.Now.AddSeconds(int.Parse(Configuration["JWT:RefreshTokenLifeTime"])), signingCredentials: credentials);
+            var tokenDescriptor = new JwtSecurityToken(issuer, audience, claims,
+                expires: DateTime.Now.AddSeconds(refreshTokenLifeTime), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
-        public bool IsTokenValid(string key, string issuer, string token)
+        public static bool IsTokenValid(string token, string key, string issuer, string audience)
         {
             var mySecret = Encoding.UTF8.GetBytes(key);
             var mySecurityKey = new SymmetricSecurityKey(mySecret);
@@ -54,7 +49,7 @@ namespace WebApi.Services
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidIssuer = issuer,
-                    ValidAudience = issuer,
+                    ValidAudience = audience,
                     IssuerSigningKey = mySecurityKey,
                 }, out SecurityToken validatedToken);
             }
