@@ -24,7 +24,7 @@ services:
       - 8001:443
     networks:
       - webapi-dev
-
+    
   proxy:
     image: nginx:latest
     volumes:

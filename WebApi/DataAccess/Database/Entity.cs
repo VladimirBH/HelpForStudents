@@ -16,7 +16,7 @@ namespace WebApi.DataAccess.Database
         public DateTimeOffset CreationDate { get; set; }
 
         [DataType(DataType.DateTime)]
-        [Column("updated_date")]
-        public DateTimeOffset? UpdatedDate { get; set; }
+        [Column("update_date")]
+        public DateTimeOffset? UpdateDate { get; set; }
     }
 }

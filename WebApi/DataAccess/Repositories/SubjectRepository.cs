@@ -8,7 +8,11 @@ namespace WebApi.DataAccess.Repositories
         public SubjectRepository(HelpForStudentsContext context, IConfiguration configuration)
             : base(context, configuration)
         {
-            
+
+        }
+        public void BuySubject(int id)
+        {
+                    
         }
     }
 }

@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using WebApi;
+using WebApi.Classes;
 using WebApi.DataAccess.Contracts;
 using WebApi.DataAccess.Repositories;
-using Microsoft.IdentityModel.Tokens;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +21,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<HelpForStudentsContext>(options => options.UseNpgsql(connectionString));
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+builder.Services.AddDbContext<HelpForStudentsContext>(options => options.UseNpgsql(connectionString, o => o.UseNodaTime()));
 
 #region Repositories
     builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));

@@ -86,14 +86,6 @@
               "target": "Package",
               "version": "[6.0.10, )"
             },
-            "NodaTime": {
-              "target": "Package",
-              "version": "[3.1.0, )"
-            },
-            "NodaTime.Serialization.SystemTextJson": {
-              "target": "Package",
-              "version": "[1.0.0, )"
-            },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[6.0.7, )"

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uBuxCWV3f/WmyotI+RM71XuoF6EK3U8j9WxxrcH/yTXbJ3ohLQT83EdetlyTWsoE0rHegiZuD4BEZ3p0u0kPLQ==",
+  "dgSpecHash": "stflRCXP+assFUVO/LhqUDFUYLBhRJsmZVGAa6pyD3p5sPF3DoyNgEDGXQsYyuYJ44J4zLfmq40f/RzFZwm0bQ==",
   "success": true,
   "projectFilePath": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
   "expectedPackageFiles": [
@@ -98,8 +98,7 @@
     "C:\\Users\\vladi\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\vladi\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\vladi\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
-    "C:\\Users\\vladi\\.nuget\\packages\\nodatime\\3.1.0\\nodatime.3.1.0.nupkg.sha512",
-    "C:\\Users\\vladi\\.nuget\\packages\\nodatime.serialization.systemtextjson\\1.0.0\\nodatime.serialization.systemtextjson.1.0.0.nupkg.sha512",
+    "C:\\Users\\vladi\\.nuget\\packages\\nodatime\\3.0.9\\nodatime.3.0.9.nupkg.sha512",
     "C:\\Users\\vladi\\.nuget\\packages\\npgsql\\6.0.7\\npgsql.6.0.7.nupkg.sha512",
     "C:\\Users\\vladi\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\6.0.7\\npgsql.entityframeworkcore.postgresql.6.0.7.nupkg.sha512",
     "C:\\Users\\vladi\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql.nodatime\\6.0.4\\npgsql.entityframeworkcore.postgresql.nodatime.6.0.4.nupkg.sha512",

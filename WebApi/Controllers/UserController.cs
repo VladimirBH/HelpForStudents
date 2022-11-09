@@ -55,8 +55,6 @@ namespace WebApi.Controllers
         }
 
         // GET api/<UserController>/GetCurrentUserInfo
-        [AllowAnonymous]
-        [Authorize]
         [HttpGet]
         public ActionResult<JsonDocument> GetCurrentUserInfo()
         {
@@ -79,7 +77,6 @@ namespace WebApi.Controllers
         }
         
         // POST api/<UserController>/SignIn
-        [AllowAnonymous]
         [HttpPost]
         public ActionResult<JsonDocument> SignIn(AuthorizationData dataAuth)
         {
@@ -102,7 +99,7 @@ namespace WebApi.Controllers
             _iUserRepository.Add(user);
             _iUserRepository.SaveChanges();
         }
-
+        /*
         // PUT api/<UserController>/5
         [HttpPut]
         public void Put(User user)
@@ -118,6 +115,6 @@ namespace WebApi.Controllers
             var user = _iUserRepository.GetById(id);
             _iUserRepository.Remove(user);
             _iUserRepository.SaveChanges();
-        }
+        }*/
     }
 }

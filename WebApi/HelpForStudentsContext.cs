@@ -20,22 +20,22 @@ namespace WebApi
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.CreationDate).HasColumnType("datetime with time zone");
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime with time zone");
+                entity.Property(e => e.UpdateDate).HasColumnType("datetime with time zone");
             });
             modelBuilder.Entity<Subject>(entity =>
             {
                 entity.Property(e => e.CreationDate).HasColumnType("datetime with time zone");
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime with time zone");
+                entity.Property(e => e.UpdateDate).HasColumnType("datetime with time zone");
             });
             modelBuilder.Entity<Payment>(entity =>
             {
                 entity.Property(e => e.CreationDate).HasColumnType("datetime with time zone");
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime with time zone");
+                entity.Property(e => e.UpdateDate).HasColumnType("datetime with time zone");
             });
             modelBuilder.Entity<Theme>(entity =>
             {
                 entity.Property(e => e.CreationDate).HasColumnType("datetime with time zone");
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime with time zone");
+                entity.Property(e => e.UpdateDate).HasColumnType("datetime with time zone");
             });
         }
     }

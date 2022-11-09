@@ -6,6 +6,6 @@ namespace WebApi.DataAccess.Contracts
     {
         int Id { get; set; }
         DateTimeOffset CreationDate { get; set; }
-        DateTimeOffset? UpdatedDate { get; set; }
+        DateTimeOffset? UpdateDate { get; set; }
     }
 }

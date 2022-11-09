@@ -8,7 +8,9 @@ namespace WebApi.DataAccess.Repositories
         public PaymentRepository(HelpForStudentsContext context, IConfiguration configuration)
             : base(context, configuration)
         {
-            
+
         }
+
+
     }
 }
