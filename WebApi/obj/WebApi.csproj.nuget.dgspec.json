@@ -52,6 +52,10 @@
               "target": "Package",
               "version": "[6.0.0, )"
             },
+            "MailKit": {
+              "target": "Package",
+              "version": "[3.4.2, )"
+            },
             "Microsoft.AspNetCore.Authentication": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -93,6 +97,10 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime": {
               "target": "Package",
               "version": "[6.0.4, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.28.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

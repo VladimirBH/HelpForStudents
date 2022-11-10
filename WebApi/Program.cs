@@ -47,6 +47,8 @@ builder.Services.AddDbContext<HelpForStudentsContext>(options => options.UseNpgs
                     (builder.Configuration["JWT:Key"]))
                 };
             });
+
+
     builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 /*builder.Services.AddHttpsRedirection(options =>
 {

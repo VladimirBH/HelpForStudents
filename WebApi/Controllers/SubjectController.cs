@@ -61,6 +61,7 @@ namespace WebApi
             try
             {
                 var subject = _iSubjectRepository.GetById(id);
+                
                 return null;
             }
             catch (AuthenticationException)

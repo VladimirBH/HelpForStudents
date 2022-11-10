@@ -99,6 +99,12 @@ namespace WebApi.Controllers
             _iUserRepository.Add(user);
             _iUserRepository.SaveChanges();
         }
+
+        [HttpPost]
+        public void SubmitEmail(string email)
+        {
+            _iUserRepository.SubmitEmail(email);
+        }
         /*
         // PUT api/<UserController>/5
         [HttpPut]

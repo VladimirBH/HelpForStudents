@@ -103,14 +103,27 @@ namespace WebApi.DataAccess.Repositories
             return tokenPair;
         }
 
+        public User GetCurrentUserInfo(string accessToken)
+        {
+            return Context.Users.FirstOrDefault(u => u.Id == GetUserIdFromAccessToken(accessToken));
+        }
+
+        public async Task<bool> SubmitEmail(string email)
+        {
+            await EmailService.SendEmailAsync(
+                emailFrom: "vovapresent@yandex.ru", 
+                password: "07112002vladburB", 
+                emailTo: email, 
+                subject: "Тест", 
+                message: "Чекай почту");
+            return true;
+        }
+
         private User GetByEmail(string email)
         {
             return Context.Users.FirstOrDefault(u => (u.Email == email));
         }
 
-        public User GetCurrentUserInfo(string accessToken)
-        {
-            return Context.Users.FirstOrDefault(u => u.Id == GetUserIdFromAccessToken(accessToken));
-        }
+
     }
 }
