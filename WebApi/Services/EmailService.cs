@@ -10,7 +10,7 @@ namespace WebApi.Services
         {
             var emailMessage = new MimeMessage();
  
-            emailMessage.From.Add(new MailboxAddress("Администрация сайта", emailFrom));
+            emailMessage.From.Add(new MailboxAddress("Помощь студентам", emailFrom));
             emailMessage.To.Add(new MailboxAddress("", emailTo));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)

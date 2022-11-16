@@ -8,6 +8,9 @@ namespace WebApi.DataAccess.Contracts
         TokenPair RefreshPairTokens(string refreshToken);
         User GetCurrentUserInfo(string refreshToken);
         int GetUserIdFromRefreshToken(string refreshToken);
-        Task<bool> SubmitEmail(string email);
+        Task SubmitEmail(string email);
+        bool CheckCodeFromEmail(string email, string code);
+        User GetByEmail(string email);
+        void CheckForConfirmationCode(string email);
     }
 }

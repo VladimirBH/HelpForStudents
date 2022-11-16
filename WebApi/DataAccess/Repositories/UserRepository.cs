@@ -1,17 +1,21 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Authentication;
 using System.Security.Claims;
+using Microsoft.Extensions.Caching.Memory;
 using WebApi.DataAccess.Database;
 using WebApi.DataAccess.Contracts;
-using WebApi;
 using WebApi.Classes;
 using WebApi.Services;
 namespace WebApi.DataAccess.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        public UserRepository(HelpForStudentsContext context, IConfiguration configuration) : base(context, configuration)
+        private readonly ICacheService _iCacheService;
+        private readonly ICiaccoRandom _iRandomer;
+        public UserRepository(HelpForStudentsContext context, IConfiguration configuration, ICacheService cacheService, ICiaccoRandom randomer) : base(context, configuration)
         {
+            _iCacheService = cacheService;
+            _iRandomer = randomer;
         }
 
         public TokenPair Authorization(AuthorizationData dataAuth)
@@ -108,22 +112,48 @@ namespace WebApi.DataAccess.Repositories
             return Context.Users.FirstOrDefault(u => u.Id == GetUserIdFromAccessToken(accessToken));
         }
 
-        public async Task<bool> SubmitEmail(string email)
+        public async Task SubmitEmail(string email)
         {
+            Random rand = new Random();
+            int seed = rand.Next(0, 999999);
+            int min = 0;
+            int max = 9999999;
+
+            _iRandomer.SetSeed(seed);
+            int confirmCode = _iRandomer.GetRand(min, max);
+            string strCode = confirmCode.ToString().PadLeft(max.ToString().Length - confirmCode.ToString().Length, '0');
+
+            _iCacheService.SetCodeForConfirmationEmail(key: email, code: strCode);
             await EmailService.SendEmailAsync(
-                emailFrom: "vovapresent@yandex.ru", 
-                password: "07112002vladburB", 
+                emailFrom: Configuration["EmailData:Email"], 
+                password: Configuration["EmailData:Password"], 
                 emailTo: email, 
-                subject: "Тест", 
-                message: "Чекай почту");
-            return true;
+                subject: "Подтверждение адреса электронной почты", 
+                message: "<h3> Благодарим за регистрацию на нашем сайте. Для окончания регистрации необходимо подтвердить почту.<br> " +
+                        "Введите код подтверждения, указанный ниже.</h3><br> <h1>" + strCode + "</h1>");
         }
 
-        private User GetByEmail(string email)
+        public bool CheckCodeFromEmail(string email, string code)
+        {
+            if(_iCacheService.GetCodeForConfirmationEmail(email) == code)
+            {
+                 _iCacheService.DeleteFromCache(key: email);
+                 return true;
+            }
+            return false; 
+        }
+
+        public User GetByEmail(string email)
         {
             return Context.Users.FirstOrDefault(u => (u.Email == email));
         }
 
-
+        public void CheckForConfirmationCode(string email)
+        {
+            if(_iCacheService.GetCodeForConfirmationEmail(email) != string.Empty)
+            {
+                _iCacheService.DeleteFromCache(email);
+            }
+        }
     }
 }

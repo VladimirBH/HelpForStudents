@@ -16,7 +16,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-         private readonly IUserRepository _iUserRepository;
+        private readonly IUserRepository _iUserRepository;
         public UserController(IUserRepository iUserRepository) 
         {
             _iUserRepository = iUserRepository;
@@ -96,24 +96,45 @@ namespace WebApi.Controllers
         [HttpPost]
         public void CreateUser(User user)
         {
+            user.EmailConfirmed = false;
             _iUserRepository.Add(user);
             _iUserRepository.SaveChanges();
+            _iUserRepository.SubmitEmail(user.Email);
         }
 
         [HttpPost]
-        public void SubmitEmail(string email)
+        public ActionResult SubmitEmail(string email)
         {
-            _iUserRepository.SubmitEmail(email);
+            User user = _iUserRepository.GetByEmail(email);
+            if(user == null || user.EmailConfirmed)
+            {
+                return StatusCode(403);
+            }
+            _iUserRepository.SubmitEmail(user.Email);
+            return StatusCode(200);
         }
-        /*
+        
+        [HttpPost]
+        public ActionResult CheckEmailCode(string email, string code)
+        {    
+            if(_iUserRepository.CheckCodeFromEmail(email, code))
+            {
+                User user = _iUserRepository.GetByEmail(email);
+                user.EmailConfirmed = true;
+                UpdateUser(user);
+                return StatusCode(200);
+            }
+            return StatusCode(403);
+        }
+        
         // PUT api/<UserController>/5
         [HttpPut]
-        public void Put(User user)
+        public void UpdateUser(User user)
         {
             _iUserRepository.Update(user);
             _iUserRepository.SaveChanges();
         }
-
+        /*
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
