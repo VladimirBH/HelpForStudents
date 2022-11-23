@@ -4,6 +4,7 @@ using System.Security.Authentication;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DataAccess.Contracts;
@@ -12,6 +13,7 @@ using WebApi.Classes;
 
 namespace WebApi.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -54,6 +56,33 @@ namespace WebApi.Controllers
             }
         }
 
+        // POST api/<UserController>/CreateUser
+        [HttpPost]
+        public ActionResult<string> CreateUser(User user)
+        {
+            if(_iUserRepository.CheckEmailForDuplication(user.Email))
+            {
+                return "This email exists";
+            }
+            user.EmailConfirmed = false;
+            _iUserRepository.Add(user);
+            _iUserRepository.SaveChanges();
+            _iUserRepository.SubmitEmailAsync(
+                email: user.Email, 
+                message: "<h3> Благодарим за регистрацию на нашем сайте." + 
+                        "Для окончания регистрации необходимо подтвердить почту.<br> " +
+                        "Введите код подтверждения, указанный ниже.</h3>");
+            return StatusCode(200);
+        }
+
+        // PUT api/<UserController>/5
+        [HttpPut]
+        public void UpdateUser(User user)
+        {
+            _iUserRepository.Update(user);
+            _iUserRepository.SaveChanges();
+        }
+
         // GET api/<UserController>/GetCurrentUserInfo
         [HttpGet]
         public ActionResult<JsonDocument> GetCurrentUserInfo()
@@ -88,52 +117,47 @@ namespace WebApi.Controllers
             }
             catch (AuthenticationException)
             {
-                return StatusCode(403);
+                return StatusCode(401);
             }
         }
         
-        // POST api/<UserController>/CreateUser
         [HttpPost]
-        public void CreateUser(User user)
-        {
-            user.EmailConfirmed = false;
-            _iUserRepository.Add(user);
-            _iUserRepository.SaveChanges();
-            _iUserRepository.SubmitEmail(user.Email);
-        }
-
-        [HttpPost]
-        public ActionResult SubmitEmail(string email)
-        {
-            User user = _iUserRepository.GetByEmail(email);
-            if(user == null || user.EmailConfirmed)
-            {
-                return StatusCode(403);
-            }
-            _iUserRepository.SubmitEmail(user.Email);
-            return StatusCode(200);
-        }
-        
-        [HttpPost]
-        public ActionResult CheckEmailCode(string email, string code)
+        public ActionResult<bool> CheckEmailCodeForConfirmation(string email, string code)
         {    
             if(_iUserRepository.CheckCodeFromEmail(email, code))
             {
                 User user = _iUserRepository.GetByEmail(email);
                 user.EmailConfirmed = true;
                 UpdateUser(user);
-                return StatusCode(200);
+                return Ok();
             }
-            return StatusCode(403);
+            return StatusCode(401);
+        }
+
+        [HttpPost]
+        public ActionResult CheckEmailCodeToRestoreAccount(string email, string code)
+        {    
+            if(_iUserRepository.CheckCodeFromEmail(email, code))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public ActionResult<string> SendMessageToRestoreAccount([FromBody]string email)
+        {
+            if(!_iUserRepository.CheckEmailForDuplication(email))
+            {
+                return "Данная почта не зарегистрирована";
+            }
+            _iUserRepository.SubmitEmailAsync(
+                email: email, 
+                message: "<h3> Восстановление пароля. " + 
+                        "Для восстановления пароля необходимо ввести код подтверждения, указанный ниже.<br></h3>");
+            return Ok();
         }
         
-        // PUT api/<UserController>/5
-        [HttpPut]
-        public void UpdateUser(User user)
-        {
-            _iUserRepository.Update(user);
-            _iUserRepository.SaveChanges();
-        }
         /*
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]

@@ -112,8 +112,17 @@ namespace WebApi.DataAccess.Repositories
             return Context.Users.FirstOrDefault(u => u.Id == GetUserIdFromAccessToken(accessToken));
         }
 
-        public async Task SubmitEmail(string email)
+        public async Task<string> SubmitEmailAsync(string email, string message)
         {
+         User user = GetByEmail(email);
+            if(user == null)
+            {
+                return "User doesn't exist";
+            }
+            if(user.EmailConfirmed)
+            {
+                return "Email has already confirmed";
+            }
             Random rand = new Random();
             int seed = rand.Next(0, 999999);
             int min = 0;
@@ -129,8 +138,9 @@ namespace WebApi.DataAccess.Repositories
                 password: Configuration["EmailData:Password"], 
                 emailTo: email, 
                 subject: "Подтверждение адреса электронной почты", 
-                message: "<h3> Благодарим за регистрацию на нашем сайте. Для окончания регистрации необходимо подтвердить почту.<br> " +
-                        "Введите код подтверждения, указанный ниже.</h3><br> <h1>" + strCode + "</h1>");
+                message: message + $"<br><h1> {strCode} </h1>");
+
+            return "Success";
         }
 
         public bool CheckCodeFromEmail(string email, string code)
@@ -154,6 +164,11 @@ namespace WebApi.DataAccess.Repositories
             {
                 _iCacheService.DeleteFromCache(email);
             }
+        }
+
+        public bool CheckEmailForDuplication(string email)
+        {
+            return GetByEmail(email) != null;
         }
     }
 }
