@@ -42,53 +42,28 @@
               </div>
               </nav>
         </header>
-        <section class="row mt-2">
-            <aside class="col">
-                <ul class="list-group" onselectstart="return false">
-                    <li class="list-group-item p-3">Дипломные работы
-                        <select class="form-select mt-2" size="5">
-                            <option title="Пример 1">Пример 1</option>
-                            <option title="Пример 2">Пример 2</option>
-                            <option title="Пример 3">Пример 3</option>
-                        </select>
-                    </li>
-                    <li class="list-group-item p-3">Курсовые работы
-                        <select class="form-select mt-2" size="5">
-                            <option title="Пример 1">Пример 1</option>
-                            <option title="Пример 2">Пример 2</option>
-                            <option title="Пример 3">Пример 3</option>
-                        </select>
-                    </li>
-                </ul>
-            </aside>
-            <main class="col-9 mt-2">
-              <form class="d-flex"> 
-                <input class="form-control mr-sm-2" type="search" placeholder="Поиск..." aria-label="Поиск"> 
-                <button class="btn ms-2" type="submit">Поиск</button> 
-              </form>
-              <div class="container-fluid overflow-auto">
-                <div class="row flex-row flex-nowrap">
-                  <div class="col-3">Тест
-                  </div>
-                  <div class="col-3">Тест
-                  </div>
-                  <div class="col-3">Тест
-                  </div>
-                  <div class="col-3">Тест
-                  </div>
-                  <div class="col-3">Тест
-                  </div>
-                  <div class="col-3">Тест
-                  </div>
-                  <div class="col-3">Тест
-                  </div>
-                </div>
-              </div>
-              <article class="row ms-4"> 
-                  Жесть
-              </article>
-            </main>
-        </section>
+        <main class="mt-2 min-vh-100 vw-25">
+            <div class="container ">
+                <form>
+                    <div class="row form-outline mb-4">
+                        <label class="form-label" for="FirstName">Имя</label>
+                        <input type="text" id="FirstName" class="form-control form-control-lg" />
+                    </div>
+
+                    <div class="row form-outline mb-4">                    
+                        <label class="form-label" for="LastName">Фамилия</label>
+                        <input type="text" id="LastName" class="form-control form-control-lg" />
+                    </div>
+
+                    <div class="row form-outline mb-4">
+                        <label class="form-label" for="Email">Адрес эл. почты</label>
+                        <input type="email" id="Email" class="form-control form-control-lg" />
+                    </div>
+                        <button type="button" id="SubmitUpdate"  
+                            class= "row btn btn-block btn-lg text-body px-5 mb-4">Изменить профиль</button>
+                </form>
+            </div>
+        </main>
         <footer class="row mt-2">
             <a class="navbar-logo" href="index.html"><img src="images/empty_logo.png" width="32" height="32"/></a>
         </footer>

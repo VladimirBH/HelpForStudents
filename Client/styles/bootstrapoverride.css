@@ -1,5 +1,21 @@
-.body-gradient
+.background-gradient
 {
     background: rgb(255,255,255);
-    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(78,209,235,1) 0%, rgba(255,255,255,1) 100%);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(47, 112, 175,1) 0%, rgba(255,255,255,1) 100%);
+}
+.btn
+{
+    border-color: rgba(47, 112, 175,1);
+}
+.btn:hover
+{
+    background: rgba(47, 112, 175,1);
+}
+.btn-help
+{
+    border-color: rgba(185, 132, 140,1);
+}
+.btn-help:hover
+{
+    background: rgba(185, 132, 140,1);
 }

@@ -13,7 +13,6 @@ using WebApi.Classes;
 
 namespace WebApi.Controllers
 {
-    //[Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -106,6 +105,7 @@ namespace WebApi.Controllers
         }
         
         // POST api/<UserController>/SignIn
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult<JsonDocument> SignIn(AuthorizationData dataAuth)
         {

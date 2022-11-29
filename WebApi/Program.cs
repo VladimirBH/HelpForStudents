@@ -17,7 +17,17 @@ using WebApi.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(
+                policy =>
+                {
+                    policy.WithOrigins("*")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+                
+        });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -83,7 +93,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
                 (Encoding.UTF8.GetBytes
                 (builder.Configuration["JWT:Key"]))
             };
-        });
+        })
+        .AddCookie();
 
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -113,6 +124,8 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseHttpsRedirection();
 
 app.UseHsts();
+
+app.UseCors();
 
 app.UseAuthorization();
 
