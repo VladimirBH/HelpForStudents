@@ -12,18 +12,32 @@ namespace WebApi.DataAccess.Repositories
     {
         private readonly ICacheService _iCacheService;
         private readonly ICiaccoRandom _iRandomer;
-        public UserRepository(HelpForStudentsContext context, IConfiguration configuration, ICacheService cacheService, ICiaccoRandom randomer) : base(context, configuration)
+        private readonly IRefreshSessionRepository _iRefreshSessionRepository;
+        public UserRepository(
+            HelpForStudentsContext context, 
+            IConfiguration configuration, 
+            IRefreshSessionRepository refreshSessionRepository, 
+            ICacheService cacheService, ICiaccoRandom randomer) : base(context, configuration)
         {
             _iCacheService = cacheService;
             _iRandomer = randomer;
+            _iRefreshSessionRepository = refreshSessionRepository;
         }
 
-        public TokenPair Authorization(AuthorizationData dataAuth)
+        public UserToken Authorization(AuthorizationData dataAuth)
         {
             var user = GetByEmail(dataAuth.Email);
             if (user == null) throw new AuthenticationException();
             if (!BCrypt.Net.BCrypt.Verify(dataAuth.Password, user.Password)) throw new AuthenticationException();
-            var tokenPair = new TokenPair
+            Guid refreshToken = TokenService.BuildRefreshToken();
+            _iRefreshSessionRepository.Add(new RefreshSession
+            {
+                UserId = user.Id,
+                RefreshToken = refreshToken,
+                ExpiresIn = Int64.Parse(Configuration["JWT:RefreshTokenLifeTime"])
+            });
+            _iRefreshSessionRepository.SaveChanges();
+            var userToken = new UserToken
             {
                 AccessToken = TokenService.BuildAccessToken(
                     user: user, 
@@ -31,17 +45,16 @@ namespace WebApi.DataAccess.Repositories
                     issuer: Configuration["JWT:Issuer"],
                     audience: Configuration["JWT:Audience"],
                     accessTokenLifeTime: int.Parse(Configuration["JWT:AccessTokenLifeTime"])),
-                RefreshToken = TokenService.BuildRefreshToken(
-                    user: user, 
-                    key: Configuration["JWT:Key"],
-                    issuer: Configuration["JWT:Issuer"],
-                    audience: Configuration["JWT:Audience"],
-                    refreshTokenLifeTime: int.Parse(Configuration["JWT:RefreshTokenLifeTime"])),
+                RefreshToken = refreshToken.ToString(),
                 ExpiredInAccessToken = int.Parse(Configuration["JWT:AccessTokenLifeTime"]),
                 ExpiredInRefreshToken = int.Parse(Configuration["JWT:RefreshTokenLifeTime"]),
-                CreationDateTime = DateTime.Now
+                CreationDateTime = DateTime.Now,
+                Name = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed
             };
-            return tokenPair;
+            return userToken;
         }
 
         public int GetUserIdFromRefreshToken(string refreshToken)
@@ -84,8 +97,20 @@ namespace WebApi.DataAccess.Repositories
 
         public TokenPair RefreshPairTokens(string refreshToken)
         {
-            var user = GetById(GetUserIdFromRefreshToken(refreshToken));
-            user = GetByEmail(user.Email);
+            RefreshSession refreshSession = _iRefreshSessionRepository.GetByRefreshToken(refreshToken);
+            if(refreshSession == null) 
+            {
+                throw new AuthenticationException();
+            }
+            _iRefreshSessionRepository.Remove(refreshSession);
+            var user = GetById(refreshSession.UserId);
+            Guid newRefreshToken = TokenService.BuildRefreshToken();
+            _iRefreshSessionRepository.Add(new RefreshSession
+            {
+                UserId = user.Id,
+                RefreshToken = newRefreshToken,
+                ExpiresIn = Int64.Parse(Configuration["JWT:RefreshTokenLifeTime"])
+            });  
             var tokenPair = new TokenPair
             {
                 AccessToken = TokenService.BuildAccessToken(
@@ -94,12 +119,7 @@ namespace WebApi.DataAccess.Repositories
                     issuer: Configuration["JWT:Issuer"],
                     audience: Configuration["JWT:Audience"],
                     accessTokenLifeTime: int.Parse(Configuration["JWT:AccessTokenLifeTime"])),
-                RefreshToken = TokenService.BuildRefreshToken(
-                    user: user, 
-                    key: Configuration["JWT:Key"],
-                    issuer: Configuration["JWT:Issuer"],
-                    audience: Configuration["JWT:Audience"],
-                    refreshTokenLifeTime: int.Parse(Configuration["JWT:RefreshTokenLifeTime"])),
+                RefreshToken = refreshToken.ToString(),
                 ExpiredInAccessToken = int.Parse(Configuration["JWT:AccessTokenLifeTime"]),
                 ExpiredInRefreshToken = int.Parse(Configuration["JWT:RefreshTokenLifeTime"]),
                 CreationDateTime = DateTime.Now

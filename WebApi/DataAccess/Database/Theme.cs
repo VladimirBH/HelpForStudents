@@ -8,5 +8,14 @@ namespace WebApi.DataAccess.Database
     {
         [Column("name")]
         public string Name {get; set;}
+
+        [Column("type_theme")]
+        public ThemeTypeEnum TypeTheme {get; set;}
+    }
+
+    public enum ThemeTypeEnum
+    {
+        diploma,
+        course
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {}
+    "d:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {
+    "d:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+        "projectUniqueName": "d:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "D:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
+        "projectPath": "d:\\for_work\\HelpForStudents\\WebApi\\WebApi.csproj",
         "packagesPath": "C:\\Users\\vladi\\.nuget\\packages\\",
-        "outputPath": "D:\\for_work\\HelpForStudents\\WebApi\\obj\\",
+        "outputPath": "d:\\for_work\\HelpForStudents\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -22,15 +22,15 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net7.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net7.0": {
+            "targetAlias": "net7.0",
             "projectReferences": {}
           }
         },
@@ -41,8 +41,8 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net7.0": {
+          "targetAlias": "net7.0",
           "dependencies": {
             "BCrypt.Net-Next": {
               "target": "Package",
@@ -50,11 +50,11 @@
             },
             "EFCore.NamingConventions": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.0, )"
             },
             "MailKit": {
               "target": "Package",
-              "version": "[3.4.2, )"
+              "version": "[3.4.3, )"
             },
             "Microsoft.AspNetCore.Authentication": {
               "target": "Package",
@@ -62,11 +62,7 @@
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[6.0.4, )"
-            },
-            "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[7.0.0, )"
             },
             "Microsoft.AspNetCore.HttpOverrides": {
               "target": "Package",
@@ -76,31 +72,27 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.10, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[7.0.0, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[7.0.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[6.0.7, )"
+              "version": "[7.0.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime": {
               "target": "Package",
-              "version": "[6.0.4, )"
-            },
-            "SendGrid": {
-              "target": "Package",
-              "version": "[9.28.1, )"
+              "version": "[7.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -113,7 +105,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -125,7 +118,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -12,7 +12,6 @@ using WebApi.Classes;
 
 namespace WebApi
 {
-    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class SubjectController : Controller
@@ -23,7 +22,7 @@ namespace WebApi
             _iSubjectRepository = iSubjectRepository;
         }
         
-        // GET: api/<UserController>
+        // GET: api/<SubjectController>
         [HttpGet]
         public ActionResult<JsonDocument> Get()
         {
@@ -39,7 +38,7 @@ namespace WebApi
             }
         }
 
-        // GET api/<UserController>/5
+        // GET: api/<SubjectController>/5
         [HttpGet("{id}")]
         public ActionResult<JsonDocument> Get(int id)
         {
@@ -55,6 +54,7 @@ namespace WebApi
             }
         }
 
+        // GET: api/<SubjectController>/5
         [HttpGet("{id}")]
         public ActionResult<JsonDocument> BuySubject(int id)
         {
@@ -62,7 +62,7 @@ namespace WebApi
             {
                 var subject = _iSubjectRepository.GetById(id);
                 
-                return null;
+                return StatusCode(200);
             }
             catch (AuthenticationException)
             {
@@ -70,7 +70,7 @@ namespace WebApi
             }
         }
         /*
-        // POST api/<UserController>/CreateUser
+        // POST api/<SubjectController>/CreateUser
         [HttpPost]
         public void CreateUser(User user)
         {

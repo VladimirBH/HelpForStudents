@@ -22,18 +22,9 @@ namespace WebApi.Services
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
         
-        public static string BuildRefreshToken(User user, string key, string issuer, string audience, int refreshTokenLifeTime)
+        public static Guid BuildRefreshToken()
         {
-            var claims = new[] {
-                new Claim(ClaimTypes.Name, user.Id.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, 
-                    Guid.NewGuid().ToString())
-            };
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-            var tokenDescriptor = new JwtSecurityToken(issuer, audience, claims,
-                expires: DateTime.Now.AddSeconds(refreshTokenLifeTime), signingCredentials: credentials);
-            return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+            return Guid.NewGuid();
         }
         public static bool IsTokenValid(string token, string key, string issuer, string audience)
         {

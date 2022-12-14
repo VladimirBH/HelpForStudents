@@ -9,9 +9,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
         <link rel="stylesheet" href="styles/bootstrapoverride.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-
+        <script src="scripts/cookies.js"></script>
+        <script src="scripts/scriptIndex.js"></script>
     </head>
-    <body class="m-4 mt-0 text-dark">
+    <body class="m-4 mt-0 text-dark" onload="onLoadBodyIndex()">
         <header class="row">
             <nav class="navbar navbar-expand-lg bg-white">
                 <div class="container-fluid fs-3">
@@ -31,13 +32,27 @@
                     </ul>
                   </div>
                 </div>
-                <div class="d-flex align-items-center">
-                  <button type="button" class="btn btn-help px-3 me-2">
-                    Вход
+                <div id="UserInfo" class="dropdown d-flex align-items-center d-none">
+                  <button id="ButtonUserMenu" class="btn btn-help dropdown-toggle me-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    
                   </button>
-                  <button type="button" class="btn me-3">
-                    Регистрация
-                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="userinfo.html">Профиль</a></li>
+                    <li><a class="dropdown-item" href="#">Покупки</a></li>
+                    <li><a class="dropdown-item" href="#">Выйти</a></li>
+                  </ul>
+                </div>
+                <div id="SignInSignUp" class="d-flex align-items-center">
+                  <a href="auth.html">
+                    <button type="button" class="btn btn-help px-3 me-2">
+                      Вход
+                    </button>
+                  </a>
+                  <a href="registration.html">
+                    <button type="button" class="btn me-3">
+                      Регистрация
+                    </button>
+                  </a>
                 </div>
               </div>
               </nav>
@@ -46,14 +61,14 @@
             <aside class="col">
                 <ul class="list-group" onselectstart="return false">
                     <li class="list-group-item p-3">Дипломные работы
-                        <select class="form-select mt-2" size="5">
+                        <select id="diplomas" class="form-select mt-2" size="5">
                             <option title="Пример 1">Пример 1</option>
                             <option title="Пример 2">Пример 2</option>
                             <option title="Пример 3">Пример 3</option>
                         </select>
                     </li>
                     <li class="list-group-item p-3">Курсовые работы
-                        <select class="form-select mt-2" size="5">
+                        <select id="course_works" class="form-select mt-2" size="5">
                             <option title="Пример 1">Пример 1</option>
                             <option title="Пример 2">Пример 2</option>
                             <option title="Пример 3">Пример 3</option>

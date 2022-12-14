@@ -4,27 +4,31 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using WebApi;
-using WebApi.Classes;
 using WebApi.DataAccess.Contracts;
 using WebApi.DataAccess.Repositories;
 using WebApi.Services;
 
 
-
+var MainCorsPolicy = "_mainCorsPolicy";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors(options =>
         {
-            options.AddDefaultPolicy(
+            options.AddPolicy(name: MainCorsPolicy,
                 policy =>
                 {
-                    policy.WithOrigins("*")
+                    policy.WithOrigins("https://localho.st:5001")
                     .AllowAnyHeader()
                     .AllowAnyMethod();
+                    
+                    policy.WithOrigins("https://localho.st:5001/api/token/refreshaccess")
+                    .AllowAnyHeader()
+                    .WithMethods("GET")
+                    .AllowCredentials();
                 });
                 
         });
@@ -35,66 +39,45 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDbContext<HelpForStudentsContext>(options => options.UseNpgsql(connectionString, o => o.UseNodaTime()));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 #region Repositories
     builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
     builder.Services.AddTransient<IUserRepository, UserRepository>();
     builder.Services.AddTransient<IThemeRepository, ThemeRepository>();
     builder.Services.AddTransient<ISubjectRepository, SubjectRepository>();
     builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
+    builder.Services.AddTransient<IRefreshSessionRepository, RefreshSessionRepository>();
 #endregion
 
-/*builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true);
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    // Password settings.
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
-
-    // Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
-
-    // User settings.
-    options.User.AllowedUserNameCharacters =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = false;
-});
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    // Cookie settings
-    options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-    options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-    options.SlidingExpiration = true;
-});*/
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["JWT:Issuer"],
-                ValidAudience = builder.Configuration["JWT:Audience"],
-                IssuerSigningKey = new
-                SymmetricSecurityKey
-                (Encoding.UTF8.GetBytes
-                (builder.Configuration["JWT:Key"]))
-            };
+builder.Services.AddAuthentication(options => {
+            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddCookie();
+            .AddCookie(/*options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Home/Error";
+            }*/)
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JWT:Issuer"],
+                    ValidAudience = builder.Configuration["JWT:Audience"],
+                    IssuerSigningKey = new
+                    SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes
+                    (builder.Configuration["JWT:Key"]))
+                };
+            });
 
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -110,11 +93,11 @@ builder.Services.TryAddTransient<ICiaccoRandom, CiaccoRandom>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
@@ -125,7 +108,7 @@ app.UseHttpsRedirection();
 
 app.UseHsts();
 
-app.UseCors();
+app.UseCors(MainCorsPolicy);
 
 app.UseAuthorization();
 

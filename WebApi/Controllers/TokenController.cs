@@ -19,20 +19,58 @@ namespace WebApi.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IUserRepository _iUserRepository;
-        public TokenController(IUserRepository iUserRepository) 
+        private readonly IRefreshSessionRepository _iRefreshSessionRepository;
+        public TokenController(IUserRepository iUserRepository, IRefreshSessionRepository iRefreshSessionRepository) 
         {
             _iUserRepository = iUserRepository;
+            _iRefreshSessionRepository = iRefreshSessionRepository;
         }
         
         // GET: api/<TokenController>
         [HttpGet]
         public ActionResult<JsonDocument> RefreshAccess()
         {
-            var httpContext = new HttpContextAccessor();
-            var refreshToken =  httpContext.HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            //var refreshToken =  HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
             try
             {
-                var jsonString = JsonSerializer.Serialize(_iUserRepository.RefreshPairTokens(refreshToken));
+                var refreshToken = HttpContext.Request.Cookies["refresh_token"];
+                if(refreshToken == null)
+                {
+                    throw new AuthenticationException();
+                }
+                RefreshSession refreshAccess = _iRefreshSessionRepository.GetByRefreshToken(refreshToken);
+                if(refreshAccess == null)
+                {
+                    throw new AuthenticationException();
+                }
+                if(DateTimeOffset.UtcNow.Subtract(refreshAccess.CreationDate).Milliseconds > refreshAccess.ExpiresIn)
+                {
+                    throw new AuthenticationException();
+                }
+                
+                User user = _iUserRepository.GetById(refreshAccess.UserId);
+
+                TokenPair tokenPair = _iUserRepository.RefreshPairTokens(refreshToken);
+
+                CookieOptions cookieOptions = new CookieOptions();
+                cookieOptions.Expires = DateTimeOffset.Now.AddMilliseconds(tokenPair.ExpiredInRefreshToken);
+                cookieOptions.Path = "/";
+                cookieOptions.HttpOnly = true;
+                cookieOptions.SameSite = SameSiteMode.None;
+                cookieOptions.Secure = true;
+                Response.Cookies.Append("refresh_token", tokenPair.RefreshToken, cookieOptions);
+
+                var userToken = new 
+                {
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Email = user.Email,
+                    EmailConfirmed = user.EmailConfirmed,
+                    AccessToken = tokenPair.AccessToken,
+                    ExpiredIn = tokenPair.ExpiredInAccessToken
+                };
+
+                var jsonString = JsonSerializer.Serialize(userToken);
                 var json = JsonDocument.Parse(jsonString);
                 return json;
             }

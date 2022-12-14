@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Text.Json;
 using System.Security.Authentication;
 using System.Collections.Generic;
@@ -6,18 +7,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
 using WebApi.DataAccess.Contracts;
 using WebApi.DataAccess.Database;
 using WebApi.Classes;
 
 namespace WebApi.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _iUserRepository;
+
         public UserController(IUserRepository iUserRepository) 
         {
             _iUserRepository = iUserRepository;
@@ -55,13 +62,13 @@ namespace WebApi.Controllers
             }
         }
 
-        // POST api/<UserController>/CreateUser
+        // POST api/<UserController>/SignUp
         [HttpPost]
-        public ActionResult<string> CreateUser(User user)
+        public ActionResult SignUp(User user)
         {
             if(_iUserRepository.CheckEmailForDuplication(user.Email))
             {
-                return "This email exists";
+                return StatusCode(401);
             }
             user.EmailConfirmed = false;
             _iUserRepository.Add(user);
@@ -75,25 +82,30 @@ namespace WebApi.Controllers
         }
 
         // PUT api/<UserController>/5
-        [HttpPut]
+        /*[HttpPut]
         public void UpdateUser(User user)
         {
             _iUserRepository.Update(user);
             _iUserRepository.SaveChanges();
-        }
+        }*/
 
+        [HttpPut]
+        public void UpdateProfile(User user)
+        {
+            _iUserRepository.Update(user);
+            _iUserRepository.SaveChanges();
+        }
         // GET api/<UserController>/GetCurrentUserInfo
         [HttpGet]
         public ActionResult<JsonDocument> GetCurrentUserInfo()
         {
             try
             {
-                var httpContext = new HttpContextAccessor();
-                if(httpContext.HttpContext == null)
+                string accessToken = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+                if(accessToken == null)
                 {
                     return StatusCode(401);
                 }
-                var accessToken =  httpContext.HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
                 var jsonString = JsonSerializer.Serialize(_iUserRepository.GetCurrentUserInfo(accessToken));
                 var json = JsonDocument.Parse(jsonString);
                 return json;
@@ -111,9 +123,28 @@ namespace WebApi.Controllers
         {
             try
             {
-                var jsonString = JsonSerializer.Serialize(_iUserRepository.Authorization(dataAuth));
+                UserToken userTokenPair = _iUserRepository.Authorization(dataAuth);
+
+                CookieOptions cookieOptions = new CookieOptions();
+                cookieOptions.Expires = DateTimeOffset.Now.AddMilliseconds(userTokenPair.ExpiredInRefreshToken);
+                cookieOptions.Path = "/";
+                cookieOptions.HttpOnly = true;
+                cookieOptions.SameSite = SameSiteMode.None;
+                cookieOptions.Secure = true;
+
+                var userToken = new 
+                {
+                    Name = userTokenPair.Name,
+                    Surname = userTokenPair.Surname,
+                    Email = userTokenPair.Email,
+                    EmailConfirmed = userTokenPair.EmailConfirmed,
+                    AccessToken = userTokenPair.AccessToken,
+                    ExpiredIn = userTokenPair.ExpiredInAccessToken
+                };
+                var jsonString = JsonSerializer.Serialize(userToken);
                 var json = JsonDocument.Parse(jsonString);
-                return json;
+                Response.Cookies.Append("refresh_token", userTokenPair.RefreshToken, cookieOptions);
+                return json; 
             }
             catch (AuthenticationException)
             {
@@ -122,26 +153,27 @@ namespace WebApi.Controllers
         }
         
         [HttpPost]
-        public ActionResult<bool> CheckEmailCodeForConfirmation(string email, string code)
+        public ActionResult<bool> ConfirmEmail(string email, string code)
         {    
             if(_iUserRepository.CheckCodeFromEmail(email, code))
             {
                 User user = _iUserRepository.GetByEmail(email);
                 user.EmailConfirmed = true;
-                UpdateUser(user);
+                _iUserRepository.Update(user);
+                _iUserRepository.SaveChanges();
                 return Ok();
             }
             return StatusCode(401);
         }
 
         [HttpPost]
-        public ActionResult CheckEmailCodeToRestoreAccount(string email, string code)
+        public ActionResult ResetPassword(string email, string code)
         {    
             if(_iUserRepository.CheckCodeFromEmail(email, code))
             {
-                return Ok();
+                return StatusCode(200);
             }
-            return BadRequest();
+            return StatusCode(400);
         }
 
         [HttpPost]
@@ -149,13 +181,13 @@ namespace WebApi.Controllers
         {
             if(!_iUserRepository.CheckEmailForDuplication(email))
             {
-                return "Данная почта не зарегистрирована";
+                return StatusCode(401);
             }
             _iUserRepository.SubmitEmailAsync(
                 email: email, 
                 message: "<h3> Восстановление пароля. " + 
                         "Для восстановления пароля необходимо ввести код подтверждения, указанный ниже.<br></h3>");
-            return Ok();
+            return StatusCode(200);
         }
         
         /*
